@@ -68,6 +68,7 @@ case $chk in
 	"yes")
 		for branch in "${branches_array[@]}";
 		do
+  			echo "Merging branch $branch"
 			git checkout $main
 			git merge -X theirs -m "Merging branch $branch in main" $branch
    			sleep 5
