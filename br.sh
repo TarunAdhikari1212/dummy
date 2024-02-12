@@ -70,6 +70,7 @@ case $chk in
 		do
 			git checkout $main
 			git merge -X theirs -m "Merging branch $branch in main" $branch
+   			sleep 5
 		done
 		;;
 	"no")
