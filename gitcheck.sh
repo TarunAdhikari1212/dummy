@@ -27,10 +27,18 @@ do
 		;;
 	b)
 		branch="$OPTARG"
-		#IFS=, read -ra branches_array <<<"$branch"
-		set -A barr $( echo "$branch" | sed 's/,/ /g' )
-		NUM_VARS=${#barr[@]}
-		echo $NUMS_VARS
+		IFS=, read -ra br_arr <<<"$branch"
+		for branch in "${br_arr[@]}"
+		do
+			for i in $(git branch -r)
+			do
+				prefix="origin/"
+                        	br="${i#$prefix}"
+				if [ "$branch" -eq "$br" ]; then
+					branches_array+=("$branch")
+				fi
+			done
+		done
 		;;
 	*)
 		echo "Remote branches:"
