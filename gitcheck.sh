@@ -26,16 +26,30 @@ do
 		done
 		;;
 	b)
+		# branch="$OPTARG"
+		# IFS=, read -ra br_arr <<<"$branch"
+		# for branch in "${br_arr[@]}"
+		# do
+		# 	for i in $(git branch -r)
+		# 	do
+		# 		prefix="origin/"
+        #                 	br="${i#$prefix}"
+		# 		if [ "$branch" -eq "$br" ]; then
+		# 			branches_array+=("$branch")
+		# 		fi
+		# 	done
+		# done
+		# ;;
 		branch="$OPTARG"
-		IFS=, read -ra br_arr <<<"$branch"
-		for branch in "${br_arr[@]}"
+		bar=$(echo ${OPTARG}|sed "s/,/,\n/g")
+		set -f
+        	IFS=,
+		for i in $(bar);
 		do
-			for i in $(git branch -r)
+			for j in $(git branch -r);
 			do
-				prefix="origin/"
-                        	br="${i#$prefix}"
-				if [ "$branch" -eq "$br" ]; then
-					branches_array+=("$branch")
+				if [ $i == $j ]; then
+					branches_array+=("$i")
 				fi
 			done
 		done
