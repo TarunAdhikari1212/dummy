@@ -6,14 +6,13 @@
 #Master branch name hardcoded.
 main="main"
 git checkout $main
-git pull
+git pull origin $main
 
 branches_array=()
-while getopts ":f:b:" opt;
-do
-	case $opt in
-	f)
-		file="$OPTARG"
+opt=$2
+case $opt in
+	"-f" | "--file")
+		file="$3"
 		for i in $(git branch -r);
 		do
 			prefix="origin/"
@@ -25,34 +24,21 @@ do
         		fi
 		done
 		;;
-	b)
-		# branch="$OPTARG"
-		# IFS=, read -ra br_arr <<<"$branch"
-		# for branch in "${br_arr[@]}"
-		# do
-		# 	for i in $(git branch -r)
-		# 	do
-		# 		prefix="origin/"
-        #                 	br="${i#$prefix}"
-		# 		if [ "$branch" -eq "$br" ]; then
-		# 			branches_array+=("$branch")
-		# 		fi
-		# 	done
-		# done
-		# ;;
-		branch="$OPTARG"
-		bar=$(echo ${OPTARG}|sed "s/,/,\n/g")
-		set -f
-        	IFS=,
-		for i in $(bar);
-		do
-			for j in $(git branch -r);
-			do
-				if [ $i == $j ]; then
-					branches_array+=("$i")
-				fi
-			done
+	"-b" | "--branches")
+		branch="$3"
+		IFS=','
+		read -ra values <<< "$str"
+		for value in "${values[@]}"; do
+    		echo "$value"
 		done
+		# for i in $(git branch -r)
+		# do
+		# 	prefix="origin/"
+        # 	# br="${i#$prefix}"
+		# 	if [ "${br_arr[@]}" == "${i#$prefix}" ]; then
+		# 		branches_array+=("$branch")
+		# 	fi			
+		# done
 		;;
 	*)
 		echo "Remote branches:"
@@ -81,7 +67,7 @@ case $chk in
 			echo "Merging branch $branch"
 			git checkout $branch
 			git merge -X ours -m "Merging content from main into $branch" $branch
-			git push
+			git push origin $branch
 			sleep 5
 		done
 		;;
