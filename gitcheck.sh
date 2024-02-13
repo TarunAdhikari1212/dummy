@@ -27,6 +27,7 @@ do
 		;;
 	b)
 		branch="$OPTARG"
+		echo -e ${OPTARG}|sed "s/,/,\n/g"
 		IFS=, read -ra barr <<<"${branch}"
 		echo "$barr[@]"
 		for i in $(git branch -r);
