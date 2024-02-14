@@ -27,7 +27,7 @@ do
 		;;
 	b)
 		branch="$OPTARG"
-		echo -e ${OPTARG}|sed "s/,/,\n/g"
+		echo -e ${OPTARG}|sed "s/,/,\\n/g"
 		IFS=, read -ra barr <<<"${branch}"
 		echo "$barr[@]"
 		for i in $(git branch -r);
@@ -65,7 +65,7 @@ case $chk in
 		do
 			echo "Merging branch $branch"
 			git checkout $branch
-			git merge -X ours -m "Merging content from main into $branch" $branch
+			git merge -X ours -m "Merging content from main into $branch" $main
 			git push
 			sleep 5
 		done
