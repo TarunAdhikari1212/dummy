@@ -12,9 +12,10 @@ declare -a pref=(
     [5]=document
 )
 
-msg=$(git log -1 --pretty=%B)
+msg_file=$("$GIT_DIR/COMMIT_EDITMSG")
+msg=$(cat "$msg_file")
 
-if echo "$commit_message" | grep -E "^[[:space:]]*($(IFS="|"; echo "${pref[*]}"))[[:space:]]*:" >/dev/null 2>&1; then
+if echo "$msg" | grep -E "^[[:space:]]*($(IFS="|"; echo "${pref[*]}"))[[:space:]]*:" >/dev/null 2>&1; then
     echo "Correct message format......."
     echo "Committing your changes"
     git commit -m "$msg"
