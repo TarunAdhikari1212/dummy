@@ -12,7 +12,7 @@ declare -a pref=(
     [5]=document
 )
 
-msg=$(git diff --cached --pretty=format:%s)
+msg=$(git log -1 --pretty=%B)
 
 if echo "$commit_message" | grep -E "^[[:space:]]*($(IFS="|"; echo "${pref[*]}"))[[:space:]]*:" >/dev/null 2>&1; then
     echo "Correct message format......."
