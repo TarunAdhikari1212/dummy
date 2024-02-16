@@ -12,7 +12,7 @@ declare -a pref=(
     [5]=document
 )
 
-msg_file=$("$GIT_DIR/COMMIT_EDITMSG")
+msg_file=$("$.git/COMMIT_EDITMSG")
 msg=$(cat "$msg_file")
 
 if echo "$msg" | grep -E "^[[:space:]]*($(IFS="|"; echo "${pref[*]}"))[[:space:]]*:" >/dev/null 2>&1; then
