@@ -20,24 +20,19 @@ declare -a pref=(
 #     msg=$(cat "$msg_file")
 # fi
 
-if [[ "$@" =~ "-m" ]]; then
-    # Find the index of the -m option
-    index=$(expr $(echo "$@" | grep -b -o -m 1 "\-m" | cut -d: -f1) + 1)
-    
-    # Extract the commit message directly
-    msg="${!index}"
+if [ -n "$COMMIT_MSG" ]; then
+    msg="$COMMIT_MSG"
 else
-    echo "Error: Please use the -m option to provide a commit message."
+    echo "Error: No commit message provided."
     exit 1
 fi
 
-echo "DEBUG: msg_file = $msg_file"
 echo "DEBUG: msg = $msg"
 
-if echo "$msg" | grep -E "^[[:space:]]*($(IFS="|"; echo "${pref[*]}"))[[:space:]]*:" >/dev/null 2>&1; then
+# if echo "$msg" | grep -E "^[[:space:]]*($(IFS="|"; echo "${pref[*]}"))[[:space:]]*:" >/dev/null 2>&1; then
+if echo "$msg" | grep -E "\b(?:add|update|remove|refactor|bug-fix|document updated|Added|Test|bug-Fix):" >/dev/null 2>&1; then
     echo "Correct message format......."
     echo "Committing your changes"
-    git commit -m "$msg"
 else
     echo "Warning: Wrong commit message format"
     echo "Allowed prefixes list:-"
