@@ -12,8 +12,27 @@ declare -a pref=(
     [5]=document
 )
 
-msg_file=$("$.git/COMMIT_EDITMSG")
-msg=$(cat "$msg_file")
+# if [ -n "$1" ]; then
+#     msg="$1"
+#     echo "$msg"
+# else
+#     msg_file=".git/COMMIT_EDITMSG"
+#     msg=$(cat "$msg_file")
+# fi
+
+if [[ "$@" =~ "-m" ]]; then
+    # Find the index of the -m option
+    index=$(expr $(echo "$@" | grep -b -o -m 1 "\-m" | cut -d: -f1) + 1)
+    
+    # Extract the commit message directly
+    msg="${!index}"
+else
+    echo "Error: Please use the -m option to provide a commit message."
+    exit 1
+fi
+
+echo "DEBUG: msg_file = $msg_file"
+echo "DEBUG: msg = $msg"
 
 if echo "$msg" | grep -E "^[[:space:]]*($(IFS="|"; echo "${pref[*]}"))[[:space:]]*:" >/dev/null 2>&1; then
     echo "Correct message format......."
@@ -26,4 +45,5 @@ else
     do
         echo $i
     done
+    exit 1
 fi
